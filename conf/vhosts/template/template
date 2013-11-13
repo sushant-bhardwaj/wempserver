@@ -1,0 +1,43 @@
+server {
+listen               80;
+listen               [::]:80;
+listen               443  ssl;
+listen               [::]:443  ssl;
+ssl_certificate      cert.pem;
+ssl_certificate_key  cert.key;
+server_name          test.ysq.me;
+
+#charset           utf-8;
+#more_set_headers  'Server: WempServer/1.0';
+
+location / {
+root     vhosts/test.ysq.me;
+index    index.html  index.htm  index.php  welcome.html;
+include  ../vhosts/test.ysq.me/rewrite.*;
+}
+
+error_page   404  /404.html;
+location  =  /404.html {
+root         html;
+}
+
+error_page   500  502  503  504  /50x.html;
+location  =  /50x.html {
+root         html;
+}
+
+location ~ \.php$ {
+root           vhosts/test.ysq.me;
+#proxy_pass    http://localhost:287;
+try_files      $uri =404;
+include        fastcgi_pass.conf;
+fastcgi_index  index.php;
+include        fastcgi.conf;
+#limit_req     zone=req_limit_per_ip  burst=10  nodelay;  #A bug found on Windows 8.
+}
+
+location ~* /rewrite+\. {
+deny  all;
+}
+}
+#For more information, please visit http://code.ysq.me/p/wempserver/
