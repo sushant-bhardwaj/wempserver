@@ -1,0 +1,8 @@
+#Rewrite for WempServer
+
+#WordPress
+#try_files $uri $uri/ /index.php?q=$uri&$args;
+
+#Add yours below.
+#For more information, please visit http://code.ysq.me/p/wempserver/
+
